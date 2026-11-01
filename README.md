@@ -17,8 +17,8 @@ standard contour interval cannot draw at all.
 
 ## What you get
 
-From Erangel's own files (the only map verified end-to-end so far), the
-pipeline produces an 8192×8192 lossless 16-bit heightmap — ~0.008 m of
+From a map's own files (Erangel and Miramar verified end-to-end so
+far), the pipeline produces an 8192×8192 lossless 16-bit heightmap — ~0.008 m of
 elevation resolution per count, ~1 m per pixel horizontally — and renders
 such as:
 
@@ -87,7 +87,7 @@ Everything the tool eats comes from your own install. Step by step:
 
    | Chunk | Internal name | Map | Status |
    |------:|---------------|-----|--------|
-   | 5100 | Desert | Miramar | identified |
+   | 5100 | Desert | Miramar | identified, fully tested |
    | 5200 | Savage | Sanhok | identified |
    | 5300 | DihorOtok | Vikendi | identified |
    | **5500** | **Baltic** | **Erangel** | **identified, fully tested** |
@@ -316,9 +316,18 @@ the game's own files (October 2026 build) and is implemented in the code.
 
 - **Erangel: complete and verified** end-to-end (unpack → stitch →
   calibrated render → labels → art overlay).
+- **Miramar: verified end-to-end** (unpack → stitch → calibrated
+  render; no bundled labels). 256/256 components stitched; against an
+  independent reference heightmap the stitch correlates at
+  r = 0.99998 with 99.76% land/sea agreement, and the engine
+  calibration needed no per-map adjustment. Calibrated range −90.4 m
+  to +256.0 m. Caveat: Miramar's *source* height data saturates at
+  the top (1.23% of pixels at the maximum value), so its highest
+  plateaus are flat-topped in the game data itself — true peak is
+  ≥ ~253 m; the sheet tops out at 256.0 m.
 - Other maps: `unpack` is generic pak v4 and their chunk families are
   identified above; `stitch` expects the same Heightmap package layout
-  and has not been run on them yet. Expect it to work; verify before
+  and has not been run on the rest yet. Expect it to work; verify before
   trusting (the stitcher refuses to emit a map with missing components).
 - Game updates can change any of this (pak version, texture format,
   offsets). The verification built into each stage — index SHA1, entry
@@ -348,6 +357,18 @@ UE Viewer forums, the cs.rin.ru UE4 key list, the QuickBMS script, the
 pubg/api-assets maintainers, and pyuepak.
 
 ## Changelog
+
+### v0.1.1 — 2026-11-01
+
+- Miramar verified end-to-end with the packaged pipeline (chunk
+  5100): 326 entries unpacked with zero verification failures,
+  256/256 components stitched, full-res correlation r = 0.99998 and
+  99.76% land/sea agreement against an independent reference
+  heightmap, calibrated range −90.4 m to +256.0 m. The calibration
+  is confirmed generic — no per-map adjustment needed.
+- Documented Miramar's source-data saturation at the top of its
+  range (see Map support). No code changes — verification and
+  documentation only.
 
 ### v0.1.0 — 2026-11-01
 

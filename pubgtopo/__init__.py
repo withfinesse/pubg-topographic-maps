@@ -8,4 +8,4 @@ Designed and built by Joel Jensen in collaboration with Pip, an AI
 assistant (Muse).
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
