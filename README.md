@@ -17,8 +17,8 @@ standard contour interval cannot draw at all.
 
 ## What you get
 
-From a map's own files (Erangel and Miramar verified end-to-end so
-far), the pipeline produces an 8192×8192 lossless 16-bit heightmap — ~0.008 m of
+From a map's own files (all four current competitive maps — Erangel,
+Miramar, Taego, Rondo — verified end-to-end), the pipeline produces an 8192×8192 lossless 16-bit heightmap — ~0.008 m of
 elevation resolution per count, ~1 m per pixel horizontally — and renders
 such as:
 
@@ -92,8 +92,8 @@ Everything the tool eats comes from your own install. Step by step:
    | 5300 | DihorOtok | Vikendi | identified |
    | **5500** | **Baltic** | **Erangel** | **identified, fully tested** |
    | 5700 | Chimera | Paramo | identified |
-   | 5900 | Tiger | Taego | identified |
-   | 6300 | Neon | Rondo | identified |
+   | 5900 | Tiger | Taego | identified, fully tested |
+   | 6300 | Neon | Rondo | identified, fully tested |
    | 5400 / 5600 / 5800 / 6000 | — | — | unconfirmed (6000 is Deston by file size only) |
 
    Don't trust the table blindly — verify: the small stub paks contain
@@ -325,6 +325,24 @@ the game's own files (October 2026 build) and is implemented in the code.
   the top (1.23% of pixels at the maximum value), so its highest
   plateaus are flat-topped in the game data itself — true peak is
   ≥ ~253 m; the sheet tops out at 256.0 m.
+- **Taego: verified end-to-end** (unpack → stitch → calibrated
+  render; no bundled labels). 256/256 components; correlation
+  r = 0.99996 against the reference, land/sea agreement 98.26% —
+  every disagreeing pixel sits within ±3 m of sea level (Taego's
+  shallow west-coast flats). Calibrated range −222.3 m to +181.1 m;
+  no saturation. Note the surrounding sea is genuinely deep here.
+- **Rondo: verified end-to-end** (unpack → stitch → calibrated
+  render; no bundled labels). 256/256 components; correlation
+  r = 0.99907 against the current community reference (r = 0.99959
+  against its older revision — the two references disagree with
+  each other at the same scale, so the residual is reference build
+  drift, not stitch error; the pipeline's own SHA1/coverage checks
+  pass independently). Land/sea agreement 98.54%. Calibrated range
+  −32.6 m to +244.6 m; no saturation. Rondo is mostly land (0.926)
+  with only a shallow sea skirt.
+- Together these four are the full current PGS/PGC competitive map
+  pool, and the single engine calibration constant held on all four
+  with no per-map adjustment.
 - Other maps: `unpack` is generic pak v4 and their chunk families are
   identified above; `stitch` expects the same Heightmap package layout
   and has not been run on the rest yet. Expect it to work; verify before
@@ -357,6 +375,17 @@ UE Viewer forums, the cs.rin.ru UE4 key list, the QuickBMS script, the
 pubg/api-assets maintainers, and pyuepak.
 
 ## Changelog
+
+### v0.2.0 — 2026-11-01
+
+- Taego and Rondo verified end-to-end with the packaged pipeline
+  (chunks 5900 / 6300), completing the current PGS/PGC competitive
+  map pool: Taego 196 entries, Rondo 296 entries, zero verification
+  failures; 256/256 components stitched for both; correlations
+  r = 0.99996 (Taego) and r = 0.99907 (Rondo, reference build
+  drift — see Map support); calibrated ranges −222.3…+181.1 m and
+  −32.6…+244.6 m. No code changes — verification and documentation
+  only.
 
 ### v0.1.1 — 2026-11-01
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pubgtopo"
-version = "0.1.1"
+version = "0.2.0"
 description = "Build topographic maps from your own PUBG install: unpack the heightmap paks, stitch the terrain tiles, render contour maps."
 readme = "README.md"
 requires-python = ">=3.10"
