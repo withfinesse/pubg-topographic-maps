@@ -1,0 +1,40 @@
+# --- Game data: NEVER commit (see README, "Repo rules") ---
+*.pak
+*.ubulk
+*.umap
+*.uexp
+*.npy
+*.tga
+
+# --- Official map art / rendered output ---
+*.png
+*.jpg
+*.jpeg
+art/
+extracted/
+output/
+outputs/
+
+# --- Keys & secrets ---
+*.key
+key.txt
+keys.txt
+.env
+
+# --- Archives ---
+*.zip
+*.7z
+*.rar
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db

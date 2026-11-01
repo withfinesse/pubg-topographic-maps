@@ -1,0 +1,8 @@
+# pubgtopo runtime dependencies (Python >= 3.10)
+numpy>=1.24
+Pillow>=9.0
+matplotlib>=3.6
+scipy>=1.10          # render stage: gaussian smoothing + connected-component water mask
+pycryptodome>=3.18   # unpack stage: AES-256-ECB decryption of pak indexes
+pyuepak>=0.2.8       # fallback source of the Oodle core library (see README, "Oodle")
+cryptography>=41     # imported by pyuepak at package import time (undeclared upstream)

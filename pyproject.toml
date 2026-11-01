@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pubgtopo"
+version = "0.1.0"
+description = "Build topographic maps from your own PUBG install: unpack the heightmap paks, stitch the terrain tiles, render contour maps."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Joel Jensen" },
+    { name = "Pip (Muse)" },
+]
+dependencies = [
+    "numpy>=1.24",
+    "Pillow>=9.0",
+    "matplotlib>=3.6",
+    "scipy>=1.10",
+    "pycryptodome>=3.18",
+    "pyuepak>=0.2.8",
+    "cryptography>=41",
+]
+
+[project.scripts]
+pubgtopo = "pubgtopo.cli:main"
+
+[tool.setuptools.package-data]
+pubgtopo = ["data/*.json"]

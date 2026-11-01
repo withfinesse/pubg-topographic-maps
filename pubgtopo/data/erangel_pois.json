@@ -1,0 +1,331 @@
+{
+ "source": "Official PUBG map art (pubg/api-assets, Erangel_Main_High_Res.png) \u2014 label anchor points measured from the printed labels by glyph detection + visual transcription, 2026-11-01. Transform art->heightmap frame: identity (scale 1.000, offset <20 px @8192; see alignment notes).",
+ "rejected_source": "JanJastrow/KampfKarten maps/names_erangel.json \u2014 hand-placed points with errors up to ~1.1 km (e.g. Rozhok, Georgopol) and a duplicated Prison entry; verified against the art and rejected.",
+ "count": 27,
+ "pois": [
+  {
+   "name": "Zharki",
+   "tier": 1,
+   "art_px": [
+    1078,
+    1291
+   ],
+   "km": [
+    1.074,
+    6.874
+   ]
+  },
+  {
+   "name": "Severny",
+   "tier": 1,
+   "art_px": [
+    3876,
+    1211
+   ],
+   "km": [
+    3.861,
+    6.954
+   ]
+  },
+  {
+   "name": "Stalber",
+   "tier": 1,
+   "art_px": [
+    5733,
+    1308
+   ],
+   "km": [
+    5.711,
+    6.857
+   ]
+  },
+  {
+   "name": "Kameshki",
+   "tier": 1,
+   "art_px": [
+    6686,
+    1034
+   ],
+   "km": [
+    6.66,
+    7.13
+   ]
+  },
+  {
+   "name": "Shooting Range",
+   "tier": 2,
+   "art_px": [
+    3409,
+    1828
+   ],
+   "km": [
+    3.396,
+    6.339
+   ]
+  },
+  {
+   "name": "Georgopol",
+   "tier": 1,
+   "art_px": [
+    1850,
+    2548
+   ],
+   "km": [
+    1.843,
+    5.622
+   ]
+  },
+  {
+   "name": "Yasnaya Polyana",
+   "tier": 1,
+   "art_px": [
+    5542,
+    2346
+   ],
+   "km": [
+    5.52,
+    5.823
+   ]
+  },
+  {
+   "name": "Rozhok",
+   "tier": 2,
+   "art_px": [
+    4026,
+    2869
+   ],
+   "km": [
+    4.01,
+    5.302
+   ]
+  },
+  {
+   "name": "Boatyard",
+   "tier": 2,
+   "art_px": [
+    3563,
+    3163
+   ],
+   "km": [
+    3.549,
+    5.009
+   ]
+  },
+  {
+   "name": "Hospital",
+   "tier": 2,
+   "art_px": [
+    1538,
+    3247
+   ],
+   "km": [
+    1.532,
+    4.926
+   ]
+  },
+  {
+   "name": "Mansion",
+   "tier": 2,
+   "art_px": [
+    6235,
+    3119
+   ],
+   "km": [
+    6.211,
+    5.053
+   ]
+  },
+  {
+   "name": "Lipovka",
+   "tier": 1,
+   "art_px": [
+    7114,
+    3292
+   ],
+   "km": [
+    7.086,
+    4.881
+   ]
+  },
+  {
+   "name": "School",
+   "tier": 2,
+   "art_px": [
+    4171,
+    3343
+   ],
+   "km": [
+    4.155,
+    4.83
+   ]
+  },
+  {
+   "name": "Ruins",
+   "tier": 2,
+   "art_px": [
+    3169,
+    3371
+   ],
+   "km": [
+    3.157,
+    4.802
+   ]
+  },
+  {
+   "name": "Gatka",
+   "tier": 1,
+   "art_px": [
+    2181,
+    3859
+   ],
+   "km": [
+    2.172,
+    4.316
+   ]
+  },
+  {
+   "name": "Prison",
+   "tier": 2,
+   "art_px": [
+    6269,
+    3700
+   ],
+   "km": [
+    6.245,
+    4.474
+   ]
+  },
+  {
+   "name": "Shelter",
+   "tier": 2,
+   "art_px": [
+    5712,
+    3951
+   ],
+   "km": [
+    5.69,
+    4.224
+   ]
+  },
+  {
+   "name": "Pochinki",
+   "tier": 1,
+   "art_px": [
+    3660,
+    4131
+   ],
+   "km": [
+    3.646,
+    4.045
+   ]
+  },
+  {
+   "name": "Mylta Power",
+   "tier": 2,
+   "art_px": [
+    7299,
+    4422
+   ],
+   "km": [
+    7.27,
+    3.755
+   ]
+  },
+  {
+   "name": "Farm",
+   "tier": 2,
+   "art_px": [
+    5358,
+    4565
+   ],
+   "km": [
+    5.337,
+    3.613
+   ]
+  },
+  {
+   "name": "Mylta",
+   "tier": 1,
+   "art_px": [
+    6161,
+    4689
+   ],
+   "km": [
+    6.137,
+    3.489
+   ]
+  },
+  {
+   "name": "Quarry",
+   "tier": 2,
+   "art_px": [
+    1818,
+    5437
+   ],
+   "km": [
+    1.811,
+    2.744
+   ]
+  },
+  {
+   "name": "Ferry Pier",
+   "tier": 2,
+   "art_px": [
+    2847,
+    5798
+   ],
+   "km": [
+    2.836,
+    2.385
+   ]
+  },
+  {
+   "name": "Sosnovka Island",
+   "tier": "R",
+   "art_px": [
+    4517,
+    6019
+   ],
+   "km": [
+    4.499,
+    2.165
+   ]
+  },
+  {
+   "name": "Primorsk",
+   "tier": 1,
+   "art_px": [
+    1624,
+    6058
+   ],
+   "km": [
+    1.618,
+    2.126
+   ]
+  },
+  {
+   "name": "Novorepnoye",
+   "tier": 1,
+   "art_px": [
+    6263,
+    6124
+   ],
+   "km": [
+    6.239,
+    2.06
+   ]
+  },
+  {
+   "name": "Sosnovka Military Base",
+   "tier": 1,
+   "art_px": [
+    4500,
+    6599
+   ],
+   "km": [
+    4.482,
+    1.587
+   ]
+  }
+ ]
+}
