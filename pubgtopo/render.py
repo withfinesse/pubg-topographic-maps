@@ -40,6 +40,28 @@ HYPSOMETRIC_STOPS = [
     (1.0, "#e8e3da"),
 ]
 
+# Vivid ramp in the style of topographic-map.com, weighted hard into
+# the low range (yellow by ~25 m, orange by ~90 m on the 0-250 m
+# scale): PUBG maps are low-relief, so an even spread leaves most
+# land in the first colour. Land only — water keeps WATER_RGB.
+VIVID_STOPS = [
+    (0.00, "#4cc95e"), (0.04, "#a4dd4f"), (0.10, "#e9e83e"),
+    (0.18, "#f9cf2e"), (0.28, "#fdb913"), (0.38, "#fb9e13"),
+    (0.48, "#f98e09"), (0.60, "#ef6a12"), (0.72, "#e8571e"),
+    (0.84, "#dd3550"), (0.92, "#e85d8a"), (1.00, "#f2a7c3"),
+]
+
+# Sand/terrain ramp (atlas palette: sand -> tan -> rust -> pale
+# summit). Chosen for the art blend: its hues sit inside the official
+# art's own colour family, so the tint reinforces the art instead of
+# washing over it.
+SAND_STOPS = [
+    (0.00, "#ddd29b"), (0.10, "#e3d68f"), (0.22, "#e8c877"),
+    (0.36, "#eab54f"), (0.50, "#e09a3e"), (0.62, "#cf7a2e"),
+    (0.74, "#b85c24"), (0.84, "#96431f"), (0.92, "#7c4a2d"),
+    (1.00, "#e8e3da"),
+]
+
 
 def load_heightmap(path):
     """Load a uint16 heightmap from .npy or a 16-bit image file."""
@@ -82,17 +104,30 @@ def load_labels(spec):
     return data["pois"] if isinstance(data, dict) else data
 
 
-def _hypsometric_cmap():
+def _hypsometric_cmap(stops=None):
     from matplotlib.colors import LinearSegmentedColormap
-    return LinearSegmentedColormap.from_list("hyp", HYPSOMETRIC_STOPS)
+    return LinearSegmentedColormap.from_list("hyp", stops or HYPSOMETRIC_STOPS)
 
 
-def _base_rgb(z, land, tint_top=250.0, vert_exag=6.0, px_m=4.0):
+def _base_rgb(z, land, tint_top=250.0, vert_exag=6.0, px_m=4.0, stops=None):
     from matplotlib.colors import LightSource
     ls = LightSource(azdeg=315, altdeg=45)
     hs = ls.hillshade(z, vert_exag=vert_exag, dx=px_m, dy=px_m)
-    tint = _hypsometric_cmap()(np.clip(z / tint_top, 0, 1))
+    tint = _hypsometric_cmap(stops)(np.clip(z / tint_top, 0, 1))
     rgb = tint[..., :3] * (0.35 + 0.65 * hs[..., None])
+    rgb[~land] = WATER_RGB
+    return rgb
+
+
+def _relief_rgb(z, land, vert_exag=6.0, px_m=4.0):
+    """Hillshade only, on a warm paper tone — the 'height colour off'
+    base. Water keeps the same flat WATER_RGB as the tinted bases so
+    toggling colour never changes the sea."""
+    from matplotlib.colors import LightSource
+    ls = LightSource(azdeg=315, altdeg=45)
+    hs = ls.hillshade(z, vert_exag=vert_exag, dx=px_m, dy=px_m)
+    rgb = np.repeat((0.30 + 0.70 * hs)[..., None], 3, axis=2)
+    rgb = rgb * np.array([0.96, 0.95, 0.92])
     rgb[~land] = WATER_RGB
     return rgb
 

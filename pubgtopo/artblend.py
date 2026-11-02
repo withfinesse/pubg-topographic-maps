@@ -44,7 +44,7 @@ def _muted_art(art_img, shape, box=None):
     return hsv_to_rgb(hsv)
 
 
-def _composite(z, art_rgb, px_m):
+def _composite(z, art_rgb, px_m, stops=None):
     """Ghost shade + whisper tint over muted art. Returns (rgb, land)."""
     from matplotlib.colors import LightSource, LinearSegmentedColormap
     land = ~water_mask(z)
@@ -52,7 +52,7 @@ def _composite(z, art_rgb, px_m):
         z, vert_exag=VERT_EXAG, dx=px_m, dy=px_m)
     base = art_rgb.copy()
     if TINT_ALPHA > 0:
-        hyp = LinearSegmentedColormap.from_list("hyp", HYPSOMETRIC_STOPS)
+        hyp = LinearSegmentedColormap.from_list("hyp", stops or HYPSOMETRIC_STOPS)
         tint = hyp(np.clip(z / 250.0, 0, 1))[..., :3]
         base[land] = base[land] * (1 - TINT_ALPHA) + tint[land] * TINT_ALPHA
     flat = np.sin(np.radians(45))  # LightSource value for flat terrain

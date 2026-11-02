@@ -398,6 +398,24 @@ pubg/api-assets maintainers, and pyuepak.
 
 ## Changelog
 
+### v0.4.0 — 2026-11-02
+
+- Two new hypsometric ramps in `pubgtopo.render`, for viewers that
+  treat height colour as its own toggleable layer (the website does,
+  from its ?v=18): `VIVID_STOPS` — a topographic-map.com-style ramp
+  weighted hard into the low range (yellow by ~25 m, orange by
+  ~90 m on the fixed 0–250 m scale), because PUBG's low-relief maps
+  leave most land in the first colour of an even spread; and
+  `SAND_STOPS` — an atlas sand→tan→rust ramp whose hues sit inside
+  the official art's colour family. `_base_rgb` and
+  `artblend._composite` take a `stops=` argument (default: the
+  classic ramp, unchanged), and art blends for the website now pass
+  `SAND_STOPS` so the tint reinforces the art instead of washing
+  over it.
+- New `pubgtopo.render._relief_rgb`: hillshade only on a warm paper
+  tone, water in the same flat `WATER_RGB` — the "height colour
+  off" base that pairs with the tinted base in the viewer.
+
 ### v0.3.0 — 2026-11-01
 
 - New `vectors` stage: contour linework extracted as geometry for
