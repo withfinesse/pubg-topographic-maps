@@ -195,6 +195,11 @@ pubgtopo render erangel_heightmap.npy --out pochinki-fine.png \
 # 3c. Topo drawn over the official map art
 pubgtopo artblend erangel_heightmap.npy \
   --art Erangel_Main_No_Text_High_Res.png --out erangel-blend.png --labels erangel
+
+# 4. Contour linework as vector data for an interactive viewer
+#    (the website draws these live — crisp at any zoom — over
+#    line-free shading tiles)
+pubgtopo vectors erangel_heightmap.npy --out erangel.bin.gz
 ```
 
 Render options worth knowing: `--span-km` (landscape size; 8.16 for
@@ -286,6 +291,23 @@ the game's own files (October 2026 build) and is implemented in the code.
   A popular community POI dataset was tried first and rejected — its
   hand-placed points are off by up to ~1.1 km.
 
+### Vector linework for interactive viewers
+
+- Raster tiles cap out at their native resolution: zoom past it and
+  the contour lines stretch and blur — exactly where players zoom.
+  The website therefore keeps only the soft parts (hillshade, tint,
+  micro-relief) as tiles and draws **all linework and text live**
+  from vector data (`pubgtopo vectors`, format spec in
+  `pubgtopo/vectors.py`). Lines stay screen-crisp at any zoom, and
+  stripping them from the tiles also shrank the site by ~30 MB.
+- Segments must be read from `QuadContourSet.allsegs`.
+  `Path.to_polygons()` applies the path's simplification and
+  silently decimates — a 6,594-point contour came back with 18
+  points, which only becomes visible when you actually draw it.
+- Chunked tracing (needed for memory at 8192²) must share edge
+  rows/columns between chunks: both sides then interpolate a seam
+  crossing to the same point and the segments meet exactly.
+
 ## Design notes
 
 - **Why 10 m by default:** Erangel's total relief is 248 m. At 20 m the
@@ -375,6 +397,21 @@ UE Viewer forums, the cs.rin.ru UE4 key list, the QuickBMS script, the
 pubg/api-assets maintainers, and pyuepak.
 
 ## Changelog
+
+### v0.3.0 — 2026-11-01
+
+- New `vectors` stage: contour linework extracted as geometry for
+  interactive viewers, which draw the lines live at screen
+  resolution instead of stretching raster tiles. Traced from the
+  full-res heightmap in seam-sharing chunks (segments meet exactly
+  at chunk edges), read from `QuadContourSet.allsegs` —
+  `Path.to_polygons()` silently decimates and must not be used —
+  Douglas-Peucker simplified at 0.35 m, and packed into the PTV1
+  binary format (master-pixel frame quantised ×8, ~0.25 m;
+  gzipped). Output for the four competitive maps: Erangel 1.3 MB,
+  Miramar 4.2 MB, Taego 1.9 MB, Rondo 2.5 MB. The website
+  (withfinesse/pubg-topo-site) rebuilt its sheets line-free and
+  draws all contours and labels from this data.
 
 ### v0.2.0 — 2026-11-01
 

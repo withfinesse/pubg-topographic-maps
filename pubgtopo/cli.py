@@ -94,6 +94,14 @@ def build_parser():
     a.add_argument("--title")
     a.add_argument("--z-scale", type=float, default=100.0)
     a.add_argument("--dpi", type=int, default=200)
+
+    v = sub.add_parser("vectors", help="extract contour linework as "
+                                       "vector data (PTV1 .bin.gz) for "
+                                       "interactive viewers")
+    v.add_argument("heightmap", help="heightmap .npy (or 16-bit PNG)")
+    v.add_argument("--out", required=True, help="output .bin.gz path")
+    v.add_argument("--span-km", type=float, default=8.16)
+    v.add_argument("--z-scale", type=float, default=100.0)
     return p
 
 
@@ -136,6 +144,14 @@ def main(argv=None):
                         span_km=args.span_km, grid=args.grid,
                         extent=args.extent, labels=args.labels,
                         title=args.title, z_scale=args.z_scale, dpi=args.dpi)
+        return 0
+
+    if args.command == "vectors":
+        from .vectors import extract_vectors
+        stats = extract_vectors(args.heightmap, args.out,
+                                span_km=args.span_km,
+                                z_scale=args.z_scale)
+        print("vectors:", stats)
         return 0
 
     return 2
