@@ -398,6 +398,20 @@ pubg/api-assets maintainers, and pyuepak.
 
 ## Changelog
 
+### v0.5.0 — 2026-11-02
+
+- Micro-relief dips are purple now, not blue (`_micro_relief_rgb`:
+  −5 m stop `#2166ac` → `#5e3c99`, −1.5 m stop `#7fa8c9` →
+  `#a79bc9`; neutral and rises unchanged). On the website, blue
+  already means water, and the fine layer's blue dips read as
+  flooding — worst on the flat shoreline aprons. Rule from here
+  on: blue only ever means water; local-relief dips are purple,
+  rises stay brown.
+- `artblend._composite` takes `tint_alpha=` (default: the module
+  TINT_ALPHA). The website builds an untinted art variant
+  (tint_alpha 0) so its Height colour toggle has a real OFF state
+  on the art base instead of swapping a layer the art covers.
+
 ### v0.4.1 — 2026-11-02
 
 - `water_mask` takes a `level=` argument (default 0.0, the true

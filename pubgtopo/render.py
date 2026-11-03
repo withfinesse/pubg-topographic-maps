@@ -143,7 +143,7 @@ def _micro_relief_rgb(z, px_m, sigma_m=40.0, clip_m=5.0):
     from scipy.ndimage import gaussian_filter
     hp = z - gaussian_filter(z, sigma_m / px_m)
     cmap = LinearSegmentedColormap.from_list(
-        "micro", [(0.0, "#2166ac"), (0.35, "#7fa8c9"), (0.5, "#f2efe9"),
+        "micro", [(0.0, "#5e3c99"), (0.35, "#a79bc9"), (0.5, "#f2efe9"),
                   (0.65, "#d9a05a"), (1.0, "#8c4a12")])
     return cmap(Normalize(-clip_m, clip_m)(np.clip(hp, -clip_m, clip_m)))[..., :3]
 
