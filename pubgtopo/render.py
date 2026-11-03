@@ -81,10 +81,16 @@ def block_mean(a, f):
     return a[:n0 * f, :n1 * f].reshape(n0, f, n1, f).mean(axis=(1, 3))
 
 
-def water_mask(z):
-    """True where z < 0 AND connected to the map edge (8-connectivity)."""
+def water_mask(z, level=0.0):
+    """True where z < level AND connected to the map edge
+    (8-connectivity). level defaults to the true waterline; the
+    website passes -0.5 m because PUBG's shoreline aprons hover
+    within +/-0.5 m of zero, so the literal line paints dry beach
+    as inlets — measured against the official art's coastline,
+    -0.5 m trades ~8 m^2 of false water removed per 1 m^2 of
+    (ankle-deep) false land added."""
     from scipy.ndimage import label
-    below = z < 0.0
+    below = z < level
     lab, _ = label(below, structure=np.ones((3, 3), int))
     border = set(np.unique(np.concatenate(
         [lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}

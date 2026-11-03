@@ -44,10 +44,10 @@ def _muted_art(art_img, shape, box=None):
     return hsv_to_rgb(hsv)
 
 
-def _composite(z, art_rgb, px_m, stops=None):
+def _composite(z, art_rgb, px_m, stops=None, level=0.0):
     """Ghost shade + whisper tint over muted art. Returns (rgb, land)."""
     from matplotlib.colors import LightSource, LinearSegmentedColormap
-    land = ~water_mask(z)
+    land = ~water_mask(z, level=level)
     hs = LightSource(azdeg=315, altdeg=45).hillshade(
         z, vert_exag=VERT_EXAG, dx=px_m, dy=px_m)
     base = art_rgb.copy()

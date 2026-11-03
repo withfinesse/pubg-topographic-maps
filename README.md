@@ -398,6 +398,22 @@ pubg/api-assets maintainers, and pyuepak.
 
 ## Changelog
 
+### v0.4.1 — 2026-11-02
+
+- `water_mask` takes a `level=` argument (default 0.0, the true
+  waterline; `artblend._composite` passes it through). The website
+  builds with level −0.5 m: PUBG's shoreline aprons hover within
+  ±0.5 m of zero (one Erangel transect sits at −0.0…−0.1 m for
+  80 m), so the literal 0 line paints dry beach as blue inlets.
+  Scored against the official art's coastline (the align-check
+  classifier, ±50 m coastal band): the 0 line paints 1,069k m² of
+  art-land as water; −0.5 m cuts that to 675k m² while adding
+  48k m² of false land, all of it the ankle-deep 0…−0.5 m fringe —
+  roughly 8 m² of false water removed per 1 m² of false land
+  added. A width-based cleanup (morphological opening at 0) was
+  tested and rejected: the apron channels are 20–30 m wide
+  swales, not hairlines.
+
 ### v0.4.0 — 2026-11-02
 
 - Two new hypsometric ramps in `pubgtopo.render`, for viewers that
