@@ -44,12 +44,16 @@ def _muted_art(art_img, shape, box=None):
     return hsv_to_rgb(hsv)
 
 
-def _composite(z, art_rgb, px_m, stops=None, level=0.0, tint_alpha=None):
+def _composite(z, art_rgb, px_m, stops=None, level=0.0, tint_alpha=None,
+               land=None):
     """Ghost shade + whisper tint over muted art. Returns (rgb, land).
     tint_alpha=None uses the module TINT_ALPHA; pass 0 for the
-    untinted variant (the website's art base with height colour off)."""
+    untinted variant (the website's art base with height colour off).
+    land= overrides the water rule entirely (the website passes its
+    art-derived coastline land mask — render.coastline_mask)."""
     from matplotlib.colors import LightSource, LinearSegmentedColormap
-    land = ~water_mask(z, level=level)
+    if land is None:
+        land = ~water_mask(z, level=level)
     hs = LightSource(azdeg=315, altdeg=45).hillshade(
         z, vert_exag=VERT_EXAG, dx=px_m, dy=px_m)
     base = art_rgb.copy()

@@ -97,6 +97,60 @@ def water_mask(z, level=0.0):
     return np.isin(lab, list(border))
 
 
+def classify_art_water(rgb, loose=False):
+    """Classify water in official map art (uint8 RGB, any resolution).
+
+    Strict (default): B > R + 12 and G > R + 4 — the align-check
+    referee used since v0.4.1. Loose (B > R + 6, G > R + 2) exists
+    only to define 'decisively not water' for the coastline veto:
+    it catches the dark seas the strict test misses (Taego's
+    south-west sea is RGB ~(16,22,25), B-R ~= 9), at the cost of
+    firing on shadowed vegetation, so it is never used as a water
+    source directly."""
+    a = rgb.astype(np.int16)
+    if loose:
+        return (a[..., 2] > a[..., 0] + 6) & (a[..., 1] > a[..., 0] + 2)
+    return (a[..., 2] > a[..., 0] + 12) & (a[..., 1] > a[..., 0] + 4)
+
+
+def coastline_mask(z, art_water_strict, art_water_loose, art_rgb):
+    """Art-derived water mask (the website's rule since v0.6.0).
+
+    All inputs on the same grid: z in metres, the two classifier
+    outputs for the official art, and the art itself (float or uint8
+    RGB) for the land veto. Candidates are the terrain flood below
+    -0.5 m plus strict art-water; the water is their edge-connected
+    components, MINUS solid art-land: pixels the art decisively
+    paints as land (not loose-blue, and red >= blue — sand, roads,
+    fields, vegetation) belonging to a decisive-land component with
+    a 'core' pixel >= 4 px from any non-land pixel.
+
+    Why each piece (all measured 2026-11-05, website audit): the
+    flood alone drowns land the heightmap carries below its own
+    water plane — Miramar's south causeway is a submerged ridge
+    (-11..+11 m) that is drivable land in the art (35.6% of art-land
+    in the band painted water; the veto cuts that to 0.1%) — while a
+    real land strip has a core, the veto costs rivers only their
+    1-3 px painted banks. The art alone fails the other way: Rondo's
+    rivers are painted dark (B-R ~= 11) and every bridge breaks
+    their connectivity, so the terrain flood carries their spine,
+    and Taego's dark sea is flood-only. Blue classifier speckle on
+    shadowed cliffs never survives: strict classification plus the
+    edge filter plus the veto keep it land."""
+    from scipy.ndimage import distance_transform_edt, label
+    decisive = (~art_water_loose) & (art_rgb[..., 0] >= art_rgb[..., 2] - 2)
+    dist = distance_transform_edt(decisive)
+    core = decisive & (dist >= 4)
+    lab, _ = label(decisive, structure=np.ones((3, 3), int))
+    solid_ids = set(np.unique(lab[core])) - {0}
+    solid_land = np.isin(lab, list(solid_ids))
+    cand = water_mask(z, level=-0.5) | art_water_strict
+    lab, _ = label(cand, structure=np.ones((3, 3), int))
+    border = set(np.unique(np.concatenate(
+        [lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
+    return np.isin(lab, list(border)) & ~solid_land
+
+
 def load_labels(spec):
     """spec is a path to a POI JSON, or 'erangel' for the bundled set
     (anchors measured from the official map art — see README)."""

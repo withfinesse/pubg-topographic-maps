@@ -332,7 +332,9 @@ the game's own files (October 2026 build) and is implemented in the code.
   first attempt — makes both layers unreadable.
 - **Water** is drawn only where z < 0 *and* connected to the map edge,
   so interior depressions and river bottoms stay land — and the
-  exactly-0.00 m Military Base plateau doesn't speckle.
+  exactly-0.00 m Military Base plateau doesn't speckle. (The website
+  instead uses the art-derived coastline from v0.6.0: `water_mask`
+  stays the print default, `coastline_mask` is the site rule.)
 
 ## Map support
 
@@ -397,6 +399,32 @@ UE Viewer forums, the cs.rin.ru UE4 key list, the QuickBMS script, the
 pubg/api-assets maintainers, and pyuepak.
 
 ## Changelog
+
+### v0.6.0 — 2026-11-05
+
+- **Art-derived coastline** (`render.classify_art_water` +
+  `render.coastline_mask`; `artblend._composite` takes `land=` to
+  accept the resulting mask). The website's water rule is no longer
+  a height threshold: candidates are the −0.5 m terrain flood plus
+  strict art-water (B > R + 12, G > R + 4 on the official No_Text
+  art), resolved to their edge-connected components, minus *solid
+  art-land* — decisive art-land (not loose-blue, red ≥ blue) whose
+  component has a core ≥ 4 px from non-land. Each piece is there
+  for a measured failure of the simpler rules (website audit,
+  2026-11-05, scored against the art's coastline on all four maps):
+  the flood alone drowns land the heightmap carries below its own
+  water plane — Miramar's south causeway is a submerged ridge
+  (−11…+11 m) that is drivable land in the art (35.6% of art-land
+  in the band painted water → 0.1% with the veto), and whole-map
+  mismatch falls on every map (Erangel 1.65 → 0.58 km², Miramar
+  2.19 → 0.42, Taego 4.11 → 3.25, Rondo 3.19 → 2.39); the art
+  alone loses Rondo's dark-painted, bridge-broken rivers, so the
+  terrain flood carries their spine; Taego's dark south-west sea
+  (RGB ≈ (16,22,25)) is flood-only, and dark art is never decisive
+  land, so the veto cannot drown it. The print pipeline's default
+  rule (below 0, edge-connected) is unchanged; the website passes
+  the art mask explicitly, and future website maps use the same
+  recipe.
 
 ### v0.5.0 — 2026-11-02
 
